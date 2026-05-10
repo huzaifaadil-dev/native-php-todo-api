@@ -17,13 +17,13 @@ final class IdempotencyKey
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $idempotencyKey = trim((string) $request->headers->get('Idempotency-Key', ''));
+        $idempotencyKey = mb_trim((string) $request->headers->get('Idempotency-Key', ''));
 
-        if ($idempotencyKey === '') {
+        if ('' === $idempotencyKey) {
             return $next($request);
         }
 
-        if (preg_match('/^[A-Za-z0-9._:-]{8,128}$/', $idempotencyKey) !== 1) {
+        if (1 !== preg_match('/^[A-Za-z0-9._:-]{8,128}$/', $idempotencyKey)) {
             return new JsonResponse([
                 'message' => __('api.errors.idempotency_key_invalid'),
             ], 422);
@@ -46,7 +46,7 @@ final class IdempotencyKey
             );
 
             $contentType = $cached['content_type'] ?? null;
-            if (is_string($contentType) && $contentType !== '') {
+            if (is_string($contentType) && '' !== $contentType) {
                 $response->headers->set('Content-Type', $contentType);
             }
 
@@ -79,7 +79,7 @@ final class IdempotencyKey
         $scope = (string) ($request->user()?->getAuthIdentifier() ?? $request->ip());
         $routeName = (string) ($request->route()?->getName() ?? $request->path());
 
-        return 'idempotency:'.sha1(sprintf('%s|%s|%s', $scope, $routeName, $idempotencyKey));
+        return 'idempotency:' . sha1(sprintf('%s|%s|%s', $scope, $routeName, $idempotencyKey));
     }
 
     private function requestHash(Request $request): string

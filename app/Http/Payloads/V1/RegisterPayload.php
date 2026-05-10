@@ -24,7 +24,7 @@ final readonly class RegisterPayload
             name: (string) $data['name'],
             email: (string) $data['email'],
             password: (string) $data['password'],
-            deviceName: isset($data['device_name']) && $data['device_name'] !== ''
+            deviceName: isset($data['device_name']) && '' !== $data['device_name']
                 ? (string) $data['device_name']
                 : 'api-client',
         );

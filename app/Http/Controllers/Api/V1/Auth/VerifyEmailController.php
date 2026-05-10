@@ -33,7 +33,7 @@ final class VerifyEmailController
 
         $user = User::query()->findOrFail($payload->id);
 
-        if (! hash_equals(sha1($user->getEmailForVerification()), $payload->hash)) {
+        if ( ! hash_equals(sha1($user->getEmailForVerification()), $payload->hash)) {
             SecurityAudit::log('auth.email_verification.failed', [
                 'user_id' => (string) $user->getKey(),
                 'reason' => 'hash_mismatch',
@@ -44,7 +44,7 @@ final class VerifyEmailController
 
         $wasAlreadyVerified = $user->hasVerifiedEmail();
 
-        if (! $wasAlreadyVerified && $user->markEmailAsVerified()) {
+        if ( ! $wasAlreadyVerified && $user->markEmailAsVerified()) {
             event(new Verified($user));
         }
 

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
 use App\Http\Middleware\SetRequestLocale;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -85,10 +85,10 @@ it('translates invalid signed url failures from accept language header', functio
 });
 
 it('translates sunset enforcement responses from accept language header', function (): void {
-    $path = '/v1/test/sunset-localized-'.Str::lower((string) Str::ulid());
+    $path = '/v1/test/sunset-localized-' . Str::lower((string) Str::ulid());
 
     Route::middleware([SetRequestLocale::class, 'sunset:2000-01-01,,true'])
-        ->get($path, fn () => new JsonResponse(['ok' => true]));
+        ->get($path, fn() => new JsonResponse(['ok' => true]));
 
     $this->withHeaders([
         'Accept-Language' => 'es',

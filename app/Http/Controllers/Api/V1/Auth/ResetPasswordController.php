@@ -35,7 +35,7 @@ use Knuckles\Scribe\Attributes\Unauthenticated;
         'errors' => ['email' => ['This password reset token is invalid.']],
     ],
     status: 422,
-    description: 'Reset token or payload was invalid.'
+    description: 'Reset token or payload was invalid.',
 )]
 final class ResetPasswordController
 {
@@ -60,10 +60,10 @@ final class ResetPasswordController
                 $resetUserId = (string) $user->getKey();
 
                 event(new PasswordReset($user));
-            }
+            },
         );
 
-        if ($status !== Password::PASSWORD_RESET) {
+        if (Password::PASSWORD_RESET !== $status) {
             SecurityAudit::log('auth.password_reset.failed', [
                 'email_hash' => SecurityAudit::hashEmail($payload->email),
                 'status' => $status,

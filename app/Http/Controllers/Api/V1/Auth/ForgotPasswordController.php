@@ -24,7 +24,7 @@ use Knuckles\Scribe\Attributes\Unauthenticated;
 #[Response(
     content: ['message' => 'If the account exists, a password reset link has been sent.'],
     status: 200,
-    description: 'Password reset request accepted.'
+    description: 'Password reset request accepted.',
 )]
 final class ForgotPasswordController
 {

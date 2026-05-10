@@ -40,7 +40,7 @@ final class PersonalAccessTokenResource extends JsonApiResource
             'expires_at' => $token->expires_at?->toAtomString(),
             'created_at' => $token->created_at?->toAtomString(),
             'updated_at' => $token->updated_at?->toAtomString(),
-            'is_current' => $currentTokenId !== null && (string) $currentTokenId === (string) $token->getKey(),
+            'is_current' => null !== $currentTokenId && (string) $currentTokenId === (string) $token->getKey(),
         ];
     }
 }

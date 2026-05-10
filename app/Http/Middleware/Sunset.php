@@ -43,13 +43,13 @@ final class Sunset
     private function attachHeaders(Response $response, CarbonImmutable $sunsetDate, ?string $successorUrl): Response
     {
         // RFC 9745 syntax for Deprecation supports epoch prefixed with @.
-        $response->headers->set('Deprecation', '@'.$sunsetDate->timestamp);
-        $response->headers->set('Sunset', $sunsetDate->format('D, d M Y H:i:s').' GMT');
+        $response->headers->set('Deprecation', '@' . $sunsetDate->timestamp);
+        $response->headers->set('Sunset', $sunsetDate->format('D, d M Y H:i:s') . ' GMT');
 
         if ($successorUrl && filter_var($successorUrl, FILTER_VALIDATE_URL)) {
             $linkValue = sprintf('<%s>; rel="successor-version"', $successorUrl);
             $existingLink = $response->headers->get('Link');
-            $response->headers->set('Link', $existingLink ? $existingLink.', '.$linkValue : $linkValue);
+            $response->headers->set('Link', $existingLink ? $existingLink . ', ' . $linkValue : $linkValue);
         }
 
         return $response;

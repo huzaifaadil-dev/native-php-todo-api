@@ -37,7 +37,7 @@ use Knuckles\Scribe\Attributes\Subgroup;
         ]],
     ],
     status: 200,
-    description: 'Token list payload.'
+    description: 'Token list payload.',
 )]
 #[Response(content: ['message' => 'Forbidden.'], status: 403, description: 'Token is missing required ability.')]
 #[Response(content: ['message' => 'Unauthenticated.'], status: 401, description: 'Authentication failed.')]

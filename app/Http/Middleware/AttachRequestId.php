@@ -31,9 +31,9 @@ final class AttachRequestId
 
     private function resolveRequestId(string $candidate): string
     {
-        $candidate = trim($candidate);
+        $candidate = mb_trim($candidate);
 
-        if ($candidate !== '' && preg_match('/^[A-Za-z0-9._-]{8,128}$/', $candidate) === 1) {
+        if ('' !== $candidate && 1 === preg_match('/^[A-Za-z0-9._-]{8,128}$/', $candidate)) {
             return $candidate;
         }
 

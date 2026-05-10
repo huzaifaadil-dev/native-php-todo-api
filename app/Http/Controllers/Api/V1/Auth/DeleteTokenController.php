@@ -35,7 +35,7 @@ final class DeleteTokenController
 
         $token = $user->tokens()->whereKey($payload->tokenId)->first();
 
-        if (! $token) {
+        if ( ! $token) {
             SecurityAudit::log('auth.tokens.revoke_failed', [
                 'user_id' => (string) $user->getKey(),
                 'token_id' => (string) $payload->tokenId,

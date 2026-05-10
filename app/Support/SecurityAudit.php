@@ -26,7 +26,7 @@ final class SecurityAudit
 
     public static function hashEmail(string $email): string
     {
-        return hash('sha256', mb_strtolower(trim($email)));
+        return hash('sha256', mb_strtolower(mb_trim($email)));
     }
 
     /**
@@ -34,7 +34,7 @@ final class SecurityAudit
      */
     private static function requestContext(): array
     {
-        if (! app()->bound('request')) {
+        if ( ! app()->bound('request')) {
             return [];
         }
 

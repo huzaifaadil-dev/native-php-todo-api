@@ -33,7 +33,7 @@ it('lists only the authenticated user tokens', function (): void {
     /** @var array<int, array<string, mixed>> $data */
     $data = $response->json('data');
     $isCurrentValues = array_map(
-        static fn (array $item): bool => (bool) data_get($item, 'attributes.is_current', false),
+        static fn(array $item): bool => (bool) data_get($item, 'attributes.is_current', false),
         $data,
     );
 
@@ -57,7 +57,7 @@ it('revokes a specific token owned by the authenticated user', function (): void
     $targetToken = $user->createToken('target-token', ['auth:tokens:read']);
 
     $this->withToken($requestToken->plainTextToken)
-        ->deleteJson('/v1/auth/tokens/'.$targetToken->accessToken->id)
+        ->deleteJson('/v1/auth/tokens/' . $targetToken->accessToken->id)
         ->assertNoContent();
 
     expect(PersonalAccessToken::query()->whereKey($targetToken->accessToken->id)->exists())->toBeFalse();
@@ -72,7 +72,7 @@ it('returns not found when revoking a token not owned by the authenticated user'
     $otherToken = $otherUser->createToken('other-token', ['auth:tokens:read']);
 
     $this->withToken($requestToken->plainTextToken)
-        ->deleteJson('/v1/auth/tokens/'.$otherToken->accessToken->id)
+        ->deleteJson('/v1/auth/tokens/' . $otherToken->accessToken->id)
         ->assertNotFound()
         ->assertJsonPath('message', __('api.auth.token_not_found'));
 });
@@ -93,7 +93,7 @@ it('forbids single token revocation when token lacks required ability', function
     $limitedToken = $user->createToken('limited-token', ['auth:me'])->plainTextToken;
 
     $this->withToken($limitedToken)
-        ->deleteJson('/v1/auth/tokens/'.$targetToken->accessToken->id)
+        ->deleteJson('/v1/auth/tokens/' . $targetToken->accessToken->id)
         ->assertForbidden()
         ->assertJsonPath('message', __('api.errors.forbidden'));
 });

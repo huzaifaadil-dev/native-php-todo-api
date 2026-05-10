@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Http\Middleware\AttachRequestId;
-use App\Http\Middleware\EnsureJsonApiRequest;
 use App\Http\Middleware\EnforceTransportSecurity;
+use App\Http\Middleware\EnsureJsonApiRequest;
 use App\Http\Middleware\IdempotencyKey;
 use App\Http\Middleware\SetRequestLocale;
 use App\Http\Middleware\Sunset;
@@ -39,13 +39,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $trustedProxies = (string) env('TRUSTED_PROXIES', '*');
-        $middleware->trustProxies($trustedProxies !== '' ? $trustedProxies : null);
+        $middleware->trustProxies('' !== $trustedProxies ? $trustedProxies : null);
 
         $trustedHosts = array_values(array_filter(array_map(
-            static fn (string $host): string => trim($host),
+            static fn(string $host): string => mb_trim($host),
             explode(',', (string) env('TRUSTED_HOSTS', '')),
         )));
-        if ($trustedHosts !== []) {
+        if ([] !== $trustedHosts) {
             $middleware->trustHosts(at: $trustedHosts, subdomains: false);
         }
 
@@ -56,7 +56,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AuthenticationException $exception, Request $request): ?JsonResponse {
-            if (! $request->expectsJson()) {
+            if ( ! $request->expectsJson()) {
                 return null;
             }
 
@@ -70,7 +70,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (AuthorizationException $exception, Request $request): ?JsonResponse {
-            if (! $request->expectsJson()) {
+            if ( ! $request->expectsJson()) {
                 return null;
             }
 
@@ -84,7 +84,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (AccessDeniedHttpException $exception, Request $request): ?JsonResponse {
-            if (! $request->expectsJson()) {
+            if ( ! $request->expectsJson()) {
                 return null;
             }
 
@@ -98,7 +98,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (TooManyRequestsHttpException $exception, Request $request): ?JsonResponse {
-            if (! $request->expectsJson()) {
+            if ( ! $request->expectsJson()) {
                 return null;
             }
 
@@ -109,7 +109,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 429);
 
             $retryAfter = $exception->getHeaders()['Retry-After'] ?? null;
-            if ($retryAfter !== null) {
+            if (null !== $retryAfter) {
                 $response->headers->set('Retry-After', (string) $retryAfter);
             }
 
@@ -117,7 +117,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (ValidationException $exception, Request $request): ?JsonResponse {
-            if (! $request->expectsJson()) {
+            if ( ! $request->expectsJson()) {
                 return null;
             }
 
@@ -132,7 +132,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (InvalidSignatureException $exception, Request $request): ?JsonResponse {
-            if (! $request->expectsJson()) {
+            if ( ! $request->expectsJson()) {
                 return null;
             }
 
